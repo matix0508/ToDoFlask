@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link
+            rel="stylesheet"
+            href="static/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous">
+</head>
+<body>
+<div>
+    <nav class="nav justify-content-center sticky-top">
+        <a class="nav-link" href="#">Link1</a>
+        <a class="nav-link" href="#">Link2</a>
+        <a class="nav-link" href="#">Link3</a>
+    </nav>
+</div>
+{% block nav %}
+{% endblock %}
+{% block content %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+    Login
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <br />
+            <br />
+        </div>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4 text-center">
+
+                <form action="/" method="POST" class="form">
+{#                        {{ template_form.hidden_tag() }}#}
+                    <div class="form-group">
+
+                            <input type="text" class="form-control" id="username" name="username" placeholder="username">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                        <br>
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="col-4"></div>
+        </div>
+    </div>
+
+{% endblock %}

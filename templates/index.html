@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}
+    Index
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-2"></div>
+                <div class="col-4 text-center">
+                    <h1>To Do:</h1>
+
+                    <ul class="list-group">
+                    {% for todo in todos %}
+                        {% if not todo.done %}
+                        <li class="list-group-item">
+                            <a class="btn btn-primary" href="{{ url_for('check_todo', todo_id=todo.id) }}">
+                                {{ todo }}
+                            </a>
+
+                            <a href="{{ url_for('remove_todo', todo_id=todo.id) }}">
+                                delete
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                    <br>
+
+                    <form method="POST" class="form">
+                        {{ template_form.hidden_tag() }}
+                        <div class="form-group">
+
+                                <input type="text" class="form-control" id="todo" name="todo" placeholder="Type your ToDo">
+
+{#                                {{ template_form.todo() }}#}
+                            <br>
+                            <button type="submit" class="btn btn-success">Add Todo</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="col-4 text-center">
+
+                    <h1>Done:</h1>
+                    <ul class="list-group">
+                        {% for todo in todos %}
+                            {% if todo.done %}
+                            <li class="list-group-item list-group-item-success">
+                                <a class="btn btn-success" href="{{ url_for('uncheck_todo', todo_id=todo.id) }}">
+                                    {{ todo }}
+                                </a>
+                                <a href="{{ url_for('remove_todo', todo_id=todo.id) }}">
+                                    delete
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                </div>
+                <div class="col-2"></div>
+        </div>
+    </div>
+
+{% endblock %}
