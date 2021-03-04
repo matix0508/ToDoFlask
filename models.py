@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     joined = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
+    admin = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return f"User: {self.username}"
@@ -24,7 +25,8 @@ class User(db.Model, UserMixin):
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo_text = db.Column(db.String(100), index=True)
-    done = db.Column(db.Boolean, default=False, nullable = False)
+    done = db.Column(db.Boolean, default=False, nullable=False)
+    owner = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return f"{self.todo_text}"
