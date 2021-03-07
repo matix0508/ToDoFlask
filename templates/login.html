@@ -12,22 +12,35 @@
             <div class="col-4"></div>
             <div class="col-4 text-center">
 
-                <form method="POST" class="form">
-                        {{ form.hidden_tag() }}
+                <form method="post" class="form">
+                    {{ form.hidden_tag() }}
                     <div class="form-group">
 
-                            <input type="text" class="form-control" id="username" name="username" placeholder="username">
-                            {% for error in form.username.errors %}
-                                <span style="color: red;">[{{ error }}]</span>
-                            {% endfor %}
-                            <input type="password" class="form-control" id="password" name="password" placeholder="password">
-                            {% for error in form.password.errors %}
-                                <span style="color: red;">[{{ error }}]</span>
-                            {% endfor %}
-                        <br>
-                        <button type="submit" class="btn btn-success">Login</button>
+                        {{ form.username(class='form-control', id='username', placeholder='Username') }}
+
+                        {{ form.password(class='form-control', id='password', placeholder='Password') }}
+
+                        {{ form.submit(class="btn btn-success", type="submit") }}
+
                     </div>
                 </form>
+
+{#                <form method="POST" class="form">#}
+{#                        {{ form.hidden_tag() }}#}
+{#                    <div class="form-group">#}
+{##}
+{#                            <input type="text" class="form-control" id="username" name="username" placeholder="username">#}
+{#                            {% for error in form.username.errors %}#}
+{#                                <span style="color: red;">[{{ error }}]</span>#}
+{#                            {% endfor %}#}
+{#                            <input type="password" class="form-control" id="password" name="password" placeholder="password">#}
+{#                            {% for error in form.password.errors %}#}
+{#                                <span style="color: red;">[{{ error }}]</span>#}
+{#                            {% endfor %}#}
+{#                        <br>#}
+{#                        <button type="submit" class="btn btn-success">Login</button>#}
+{#                    </div>#}
+{#                </form>#}
 
             </div>
 

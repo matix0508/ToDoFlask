@@ -15,6 +15,7 @@ def load_user(id):
 def unauthorized():
     return "You have no power here"
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -30,6 +31,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
+            return redirect(url_for('panel'))
             flash("Invalid username or password")
             return redirect(url_for('login'))
         login_user(user, remember=form.remember.data)
@@ -97,4 +99,12 @@ def panel():
         return redirect(url_for('unauthorized'))
     models = [User, Todo]
     names = ["User", "Todo"]
-    return "panel"
+    return render_template('panel.html', models=models, names=names, items=len(names), panel=True)
+
+
+@app.route('/panel/add_user')
+@login_required
+def add_user():
+    if not current_user.admin:
+        return redirect(url_for('unauthorized'))
+    fields = ["User"]

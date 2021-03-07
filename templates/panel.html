@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Panel{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col text-center">
+                {% for i in range(items) %}
+                    <h2 class="display-3">
+                        {{ names[i] }}
+                        <a class="btn btn-success" href="#">+</a>
+                    </h2>
+
+                    <ul class="list-group">
+                        {% for item in models[i].query.all() %}
+                            <li class="list-group-item">
+                                <a href="#" class="btn list-group-item-action">{{ item }}</a>
+                                <a href="#" class="btn btn-primary">Edit</a>
+                                <a href="#" class="btn btn-danger">Delete</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                {% endfor %}
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}

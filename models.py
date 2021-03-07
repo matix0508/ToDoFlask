@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
-        return f"User: {self.username}"
+        return f"{self.username}"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -29,4 +29,4 @@ class Todo(db.Model):
     owner = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f"{self.todo_text}"
+        return f"{self.todo_text}, by {User.query.get(self.owner)}"

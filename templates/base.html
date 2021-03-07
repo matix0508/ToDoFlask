@@ -20,12 +20,16 @@
                 <div class="nav-item">
                     <a class="nav-link {% if notes %} active {% endif %}" href="{{ url_for('index') }}">Notes</a>
                 </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">Link2</a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="#">Link3</a>
-                </div>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.admin %}
+                        <div class="nav-item">
+                            <a class="nav-link {% if panel %} active {% endif %}" href="{{ url_for('panel') }}">Panel</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+{#                <div class="nav-item">#}
+{#                    <a class="nav-link" href="#">Link3</a>#}
+{#                </div>#}
 
             </nav>
         </div>
@@ -46,7 +50,7 @@
                         </div>
                         <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
                         {% if current_user.admin %}
-                            <a href="#" class="btn btn-warning">Panel</a>
+                            <a href="{{ url_for('panel') }}" class="btn btn-warning">Panel</a>
                         {% endif %}
                     </div>
                 </div>
