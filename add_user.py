@@ -16,6 +16,7 @@ if password != repeat_password:
 user = User(username=username, email=email)
 user.set_password(password)
 user.admin = True
+user.photo = input("Name of a photo file: ")
 db.session.add(user)
 try:
     db.session.commit()

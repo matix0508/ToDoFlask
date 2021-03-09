@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     joined = db.Column(db.DateTime(), index=True, default=datetime.utcnow)
     admin = db.Column(db.Boolean, default=False, nullable=False)
+    photo = db.Column(db.String(120), index=True, unique=False)
 
     def __repr__(self):
         return f"{self.username}"
