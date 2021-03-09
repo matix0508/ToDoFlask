@@ -5,15 +5,36 @@ from app import app, db, login_manager
 from flask_login import login_required, logout_user, current_user, login_user
 from werkzeug.urls import url_parse
 
+items = []
+
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('error.html',
+                           blocked=True,
+                           photo="static/NoCanDo.jpeg",
+                           photo_text="No Can Do",
+                           text="Daaaamn, Looks like you have wrong Address",
+                           title="No Can Do"
+                           ), 404
+
+
 @login_manager.unauthorized_handler
 def unauthorized():
-    return "You have no power here"
+    return render_template(
+        'error.html',
+        blocked=True,
+        photo="static/ThereIsNoTry.jpg",
+        photo_text="Try Not",
+        text="Looks Like You have no power Here, Are you lost?",
+        title="Try Not"
+                           )
 
 
 @app.route('/logout')
@@ -21,6 +42,11 @@ def unauthorized():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route("/nope")
+@login_required
+def nope():
+    return render_template('error.html')
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -31,12 +57,12 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            return redirect(url_for('panel'))
+            # return redirect(url_for('panel'))
             flash("Invalid username or password")
-            return redirect(url_for('login'))
+            return redirect(url_for('nope'))
         login_user(user, remember=form.remember.data)
         return redirect(url_for('index'))
-    return render_template('login.html', form=LoginForm())
+    return render_template('login.html', form=LoginForm(), blocked=True)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -45,19 +71,22 @@ def index():
         logged_in = True
         login_on = False
     else:
-        logged_in = False
-        login_on = True
+        return redirect(url_for('login'))
     if 'todo' in request.form:
         if request.form['todo']:
             item = Todo(todo_text=request.form['todo'])
             if logged_in:
                 item.owner = current_user.id
+            else:
+                items.append(item)
             db.session.add(item)
             db.session.commit()
             return redirect(url_for('index'))
-    todos = []
+    # todos = []
     if logged_in:
         todos = Todo.query.filter_by(owner=current_user.id).all()
+    else:
+        todos = items
     return render_template(
         "index.html",
         todos=todos,
@@ -85,8 +114,11 @@ def uncheck_todo(todo_id):
 
 
 @app.route('/remove/<int:todo_id>', methods=["GET", "POST"])
+@login_required
 def remove_todo(todo_id):
     my_todo = Todo.query.get(todo_id)
+    if not current_user.admin or current_user.id == my_todo.owner:
+        redirect(url_for('nope'))
     db.session.delete(my_todo)
     db.session.commit()
     return redirect(url_for('index'))
@@ -96,7 +128,7 @@ def remove_todo(todo_id):
 @login_required
 def panel():
     if not current_user.admin:
-        return redirect(url_for('unauthorized'))
+        return redirect(url_for('nope'))
     models = [User, Todo]
     names = ["User", "Todo"]
     return render_template('panel.html', models=models, names=names, items=len(names), panel=True)
@@ -106,5 +138,5 @@ def panel():
 @login_required
 def add_user():
     if not current_user.admin:
-        return redirect(url_for('unauthorized'))
+        return redirect(url_for('nope'))
     fields = ["User"]
