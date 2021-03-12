@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash
-from forms import TodoForm, LoginForm
+from forms import TodoForm, LoginForm, NewUserForm
 from models import Todo, User
 from app import app, db, login_manager
 from flask_login import login_required, logout_user, current_user, login_user
@@ -62,7 +62,7 @@ def login():
             return redirect(url_for('nope'))
         login_user(user, remember=form.remember.data)
         return redirect(url_for('index'))
-    return render_template('login.html', form=LoginForm(), blocked=True)
+    return render_template('login.html', form=form, blocked=True)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -139,4 +139,5 @@ def panel():
 def add_user():
     if not current_user.admin:
         return redirect(url_for('nope'))
-    fields = ["User"]
+
+    return render_template("new_user.html", form=NewUserForm())
